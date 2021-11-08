@@ -8,7 +8,18 @@ import (
 var data map[string]interface{}
 
 func initialize() {
-	data = common.File2Map("./myPassword.csv")
+	filePath := "./myPassword.csv"
+	ifFileNotExistGenerate(filePath)
+	data = common.File2Map(filePath)
+}
+
+func ifFileNotExistGenerate(path string) {
+	if _,err := os.Stat(path); err != nil {
+		if os.IsNotExist(err) {
+			f,_ := os.Create(path)
+			f.Write([]byte("{}"))
+		}
+	}
 }
 
 func main() {
